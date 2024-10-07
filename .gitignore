@@ -23,7 +23,7 @@
 hs_err_pid*
 replay_pid*
 
-.gitignore
-.vscode
-.sonarlint
-
+/.vscode/
+/.sonarlint/
+/.metadata/
+/Senha do appsenhas.txt/
