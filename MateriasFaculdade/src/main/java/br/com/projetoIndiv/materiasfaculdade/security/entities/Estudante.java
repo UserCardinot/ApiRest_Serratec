@@ -56,8 +56,7 @@ public class Estudante {
 	public Estudante() {
 	}
 
-	public Estudante(String nome, String username, String password, String email, int matricula) {
-		this.nome = nome;
+	public Estudante(String username, String password, String email, int matricula) {
 		this.username = username;
 		this.password = password;
 		this.email = email;

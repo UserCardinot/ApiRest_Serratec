@@ -9,9 +9,9 @@ import br.com.projetoIndiv.materiasfaculdade.security.entities.Faculdade;
 
 @Repository("faculdade")
 public interface FaculdadeRepository extends JpaRepository<Faculdade, Integer> {
-	Optional<Faculdade> findByUsername(String username);
+	Optional<Faculdade> findByNome(String nome);
 
-	Boolean existsByUsername(String username);
+	Boolean existsByNome(String nome);
 
-	Boolean existsByEmail(String email);
+	Boolean existsByCampus(String campus);
 }

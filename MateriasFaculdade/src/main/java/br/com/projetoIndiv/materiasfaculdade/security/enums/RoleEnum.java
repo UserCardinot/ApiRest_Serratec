@@ -3,7 +3,7 @@ package br.com.projetoIndiv.materiasfaculdade.security.enums;
 public enum RoleEnum {
 	ROLE_USER("Role Usuário", 1),
 	ROLE_MODERATOR("Role Estudante", 2),
-	ROLE_ADMIN("Role Admin Facul", 3);
+	ROLE_ADMIN("Role Admin", 3);
 	
 	private String tipo;
     private int codigo;

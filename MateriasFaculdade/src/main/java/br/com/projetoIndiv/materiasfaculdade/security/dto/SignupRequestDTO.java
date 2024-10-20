@@ -9,9 +9,6 @@ import jakarta.validation.constraints.Size;
 public class SignupRequestDTO {
 
 	@NotBlank
-	private String nome;
-
-	@NotBlank
 	@Size(min = 3, max = 20)
 	private String username;
 
@@ -32,14 +29,6 @@ public class SignupRequestDTO {
 
 	@NotBlank
 	private Integer idade;
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 
 	public String getUsername() {
 		return username;

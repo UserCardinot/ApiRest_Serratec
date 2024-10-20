@@ -9,15 +9,13 @@ import br.com.projetoIndiv.materiasfaculdade.security.entities.Endereco;
 
 @Repository
 public interface EnderecoRepository extends JpaRepository<Endereco, Integer> {
-    Optional<Endereco> findByRua(String rua);
+    Optional<Endereco> findByLogradouro(String logradouro);
 
-    Boolean existsByRua(String rua);
+    Optional<Endereco> findByBairro(String bairro);
 
-    Boolean existsByBairro(String bairro);
+    Optional<Endereco> findByLocalidade(String localidade);
 
-    Boolean existsByCidade(String cidade);
+    Optional<Endereco> findByEstado(String estado);
 
-    Boolean existsByEstado(String estado);
-
-    Boolean existsByCep(String cep);
+    Optional<Endereco> findByCep(String cep);   
 }
