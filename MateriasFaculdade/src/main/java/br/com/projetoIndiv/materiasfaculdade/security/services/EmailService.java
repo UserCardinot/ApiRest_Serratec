@@ -1,4 +1,4 @@
-package br.com.projetoIndiv.materiasfaculdade.services;
+package br.com.projetoIndiv.materiasfaculdade.security.services;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
