@@ -1,6 +1,7 @@
 package br.com.projetoIndiv.materiasfaculdade.security.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -12,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -25,10 +26,6 @@ public class Faculdade {
     @Column(name = "Fac_cd_id")
 	private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Fac_fk_endereco")
-    private Endereco fkEndereco;
-
     @NotBlank
     @Column(name = "Fac_txt_campus")
     private String campus;
@@ -37,19 +34,21 @@ public class Faculdade {
     @Column(name = "Fac_txt_nome")
     private String nome;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "faculdade_roles", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OneToMany(mappedBy = "faculdade")
+    private List<Endereco> fkEndereco;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "faculdade_roles", joinColumns = @JoinColumn(name = "faculdade_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> faculdadeRole = new HashSet<>();
 
     public Faculdade() {
     }
 
-    public Faculdade(Integer id, Endereco fkEndereco, String campus, String nome) {
+    public Faculdade(Integer id, String campus, String nome, List<Endereco> fkEndereco) {
         this.id = id;
-        this.fkEndereco = fkEndereco;
         this.campus = campus;
         this.nome = nome;
+        this.fkEndereco = fkEndereco;
     }
 
     public Faculdade(String nome) {
@@ -76,14 +75,6 @@ public class Faculdade {
         return campus;
     }
 
-    public Endereco getFkEndereco() {
-        return fkEndereco;
-    }
-
-    public void setFkEndereco(Endereco fkEndereco) {
-        this.fkEndereco = fkEndereco;
-    }
-
     public void setCampus(String campus) {
         this.campus = campus;
     }
@@ -94,5 +85,13 @@ public class Faculdade {
 
     public Set<Role> getFaculdadeRole() {
         return faculdadeRole;
+    }
+
+    public List<Endereco> getFkEndereco() {
+        return fkEndereco;
+    }
+
+    public void setFkEndereco(List<Endereco> fkEndereco) {
+        this.fkEndereco = fkEndereco;
     }
 }

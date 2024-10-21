@@ -50,7 +50,6 @@ public class Estudante {
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "estudante_roles", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-
 	private Set<Role> roles = new HashSet<>();
 
 	public Estudante() {

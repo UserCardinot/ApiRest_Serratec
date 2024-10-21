@@ -1,5 +1,6 @@
 package br.com.projetoIndiv.materiasfaculdade.security.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,9 +10,13 @@ import br.com.projetoIndiv.materiasfaculdade.security.entities.Faculdade;
 
 @Repository("faculdade")
 public interface FaculdadeRepository extends JpaRepository<Faculdade, Integer> {
-	Optional<Faculdade> findByNome(String nome);
+	Optional<Faculdade> findById(Integer id);
 
-	Boolean existsByNome(String nome);
+	List<Faculdade> findAll();
 
-	Boolean existsByCampus(String campus);
+	Faculdade save(Faculdade faculdade);
+
+	//Faculdade update(Integer id, Faculdade faculdade);
+
+	// Faculdade delete(Integer id);
 }

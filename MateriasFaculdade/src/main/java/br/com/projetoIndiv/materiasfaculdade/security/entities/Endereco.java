@@ -5,10 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Enderecos")
+@Table(name = "enderecos")
 public class Endereco {
 
     @Id
@@ -31,16 +33,21 @@ public class Endereco {
     @Column(name = "End_txt_cep")
     private String cep;
 
+    @ManyToOne
+    @JoinColumn(name = "Fac_cd_id", nullable = false)
+    private Faculdade faculdade;
+
     public Endereco() {
     }
 
-    public Endereco(Integer id, String logradouro, String bairro, String localidade, String estado, String cep) {
+    public Endereco(Integer id, String logradouro, String bairro, String localidade, String estado, String cep, Faculdade faculdade) {
         this.id = id;
         this.logradouro = logradouro;
         this.bairro = bairro;
         this.localidade = localidade;
         this.estado = estado;
         this.cep = cep;
+        this.faculdade = faculdade;
     }
 
     public Integer getId() {
@@ -89,5 +96,9 @@ public class Endereco {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public Faculdade getFaculdade() {
+        return faculdade;
     }
 }
