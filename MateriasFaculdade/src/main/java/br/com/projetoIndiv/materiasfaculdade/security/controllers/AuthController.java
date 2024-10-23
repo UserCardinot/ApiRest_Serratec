@@ -114,31 +114,25 @@ public class AuthController {
 	@PostMapping("/signupFaculdade")
 	public ResponseEntity<?> registerFaculdade(@Valid @RequestBody SignupFaculRequestDTO signUpFaculRequest) {
 
-		// Verificar se o campus já existe
 		if (faculRepository.existsByCampus(signUpFaculRequest.getCampus())) {
 			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro: Campus já utilizado!"));
 		}
 
-		// Criar a nova instância da Faculdade
 		Faculdade facul = new Faculdade();
 		facul.setNome(signUpFaculRequest.getNome());
 		facul.setCampus(signUpFaculRequest.getCampus());
 		facul.setCep(signUpFaculRequest.getCep());
 
-		// Definir as roles da faculdade
 		Set<Role> roles = new HashSet<>();
 		Role usuarioRole = roleRepository.findByName(RoleEnum.ROLE_FACULDADE)
 				.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 		roles.add(usuarioRole);
 		facul.setFaculdadeRole(roles);
 
-		// Salvar a faculdade para obter o ID
 		facul = faculRepository.save(facul);
 
-		// Buscar informações do endereço usando o CEP
 		EnderecoResponseDTO enderecoResponse = enderecoService.buscarEndereco(signUpFaculRequest.getCep());
 
-		// Criar uma nova instância de Endereco com as informações retornadas do ViaCEP
 		Endereco endereco = new Endereco();
 		endereco.setCep(enderecoResponse.getCep());
 		endereco.setLogradouro(enderecoResponse.getLogradouro());
@@ -147,11 +141,8 @@ public class AuthController {
 		endereco.setEstado(enderecoResponse.getEstado());
 		endereco.setFaculdade(facul);
 
-		// Salvar o endereço no banco de dados
 		enderecoRepository.save(endereco);
 
-		// Adicionar o endereço à lista de endereços da faculdade e salvar a faculdade
-		// novamente
 		facul.getEnderecos().add(endereco);
 		faculRepository.save(facul);
 

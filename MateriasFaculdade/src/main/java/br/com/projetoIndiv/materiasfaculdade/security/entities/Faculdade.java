@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,6 +42,7 @@ public class Faculdade {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "faculdade_roles", joinColumns = @JoinColumn(name = "faculdade_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonBackReference
     private Set<Role> faculdadeRole = new HashSet<>();
 
     public Faculdade() {

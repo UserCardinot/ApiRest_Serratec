@@ -10,8 +10,16 @@ import br.com.projetoIndiv.materiasfaculdade.security.repositories.RoleRepositor
 public class RoleService {
 	@Autowired
 	RoleRepository roleRepository;
-	
+
 	public Role save(Role role) {
 		return roleRepository.save(role);
+	}
+
+	public Role findById(Integer id) {
+		return roleRepository.findById(id).orElse(null);
+	}
+
+	public void delete(Role role) {
+		roleRepository.delete(role);
 	}
 }

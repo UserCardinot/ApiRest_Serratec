@@ -3,6 +3,8 @@ package br.com.projetoIndiv.materiasfaculdade.security.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,8 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "Estudantes")
@@ -25,20 +25,12 @@ public class Estudante {
 	@Column(name = "Est_cd_id")
 	private int id;
 
-	@NotBlank
-	@Column(name = "Est_txt_nome")
-	private String nome;
-
-	@NotBlank
 	@Column(name = "Est_txt_username")
 	private String username;
 
-	@NotBlank
 	@Column(name = "Est_txt_password")
 	private String password;
 
-	@NotBlank
-	@Email
 	@Column(name = "Est_txt_email")
 	private String email;
 
@@ -50,25 +42,22 @@ public class Estudante {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "estudante_roles", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JsonBackReference
 	private Set<Role> roles = new HashSet<>();
 
 	public Estudante() {
 	}
 
-	public Estudante(String username, String password, String email, int matricula, int idade) {
+	public Estudante(String username, String email, String password, int matricula, int idade) {
 		this.username = username;
-		this.password = password;
 		this.email = email;
+		this.password = password;
 		this.matricula = matricula;
 		this.idade = idade;
 	}
 
 	public int getId() {
 		return id;
-	}
-
-	public String getNome() {
-		return nome;
 	}
 
 	public String getUsername() {
@@ -89,10 +78,6 @@ public class Estudante {
 
 	public int getIdade() {
 		return idade;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public void setUsername(String username) {

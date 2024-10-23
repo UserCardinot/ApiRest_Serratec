@@ -3,6 +3,8 @@ package br.com.projetoIndiv.materiasfaculdade.security.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,10 +38,12 @@ public class Materias {
 
     @ManyToMany
     @JoinTable(name = "estudante_materia", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "estudante_id"))
+    @JsonBackReference
     private Set<Estudante> estudantes = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "materia_faculdade", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "faculdade_id"))
+    @JsonBackReference
     private Set<Faculdade> faculdades = new HashSet<>();
 
     public Materias() {
