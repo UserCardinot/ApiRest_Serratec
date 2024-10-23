@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Estudantes")
@@ -37,17 +36,18 @@ public class Estudante {
 	@NotBlank
 	@Column(name = "Est_txt_password")
 	private String password;
-	
+
 	@NotBlank
 	@Email
 	@Column(name = "Est_txt_email")
 	private String email;
 
-    @NotBlank
-    @Size(max = 20)
 	@Column(name = "Est_int_matricula")
-    private int matricula;
-	
+	private int matricula;
+
+	@Column(name = "Est_int_idade")
+	private int idade;
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "estudante_roles", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
@@ -55,11 +55,12 @@ public class Estudante {
 	public Estudante() {
 	}
 
-	public Estudante(String username, String password, String email, int matricula) {
+	public Estudante(String username, String password, String email, int matricula, int idade) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
-        this.matricula = matricula;
+		this.matricula = matricula;
+		this.idade = idade;
 	}
 
 	public int getId() {
@@ -82,9 +83,13 @@ public class Estudante {
 		return email;
 	}
 
-    public int getMatricula() {
-        return matricula;
-    }
+	public int getMatricula() {
+		return matricula;
+	}
+
+	public int getIdade() {
+		return idade;
+	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -102,10 +107,14 @@ public class Estudante {
 		this.email = email;
 	}
 
-    public void setMatricula(int matricula) {
-        this.matricula = matricula;
-    }
-	
+	public void setMatricula(int matricula) {
+		this.matricula = matricula;
+	}
+
+	public void setIdade(int idade) {
+		this.idade = idade;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}

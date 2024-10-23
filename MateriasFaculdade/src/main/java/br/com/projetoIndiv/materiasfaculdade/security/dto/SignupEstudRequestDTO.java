@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class SignupRequestDTO {
+public class SignupEstudRequestDTO {
 
 	@NotBlank
 	@Size(min = 3, max = 20)
@@ -23,11 +23,7 @@ public class SignupRequestDTO {
 	@Size(min = 6, max = 40)
 	private String password;
 
-	@NotBlank
-	@Size(min = 4, max = 10)
 	private Integer matricula;
-
-	@NotBlank
 	private Integer idade;
 
 	public String getUsername() {

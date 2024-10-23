@@ -15,44 +15,39 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "Faculdades")
 public class Faculdade {
 
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Fac_cd_id")
-	private Integer id;
+    private Integer id;
 
-    @NotBlank
     @Column(name = "Fac_txt_campus")
     private String campus;
 
-    @NotBlank
     @Column(name = "Fac_txt_nome")
     private String nome;
+
+    @Column(name = "Fac_txt_cep")
+    private String cep;
 
     @OneToMany(mappedBy = "faculdade")
     private List<Endereco> fkEndereco;
 
     @ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "faculdade_roles", joinColumns = @JoinColumn(name = "faculdade_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> faculdadeRole = new HashSet<>();
+    @JoinTable(name = "faculdade_roles", joinColumns = @JoinColumn(name = "faculdade_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> faculdadeRole = new HashSet<>();
 
     public Faculdade() {
     }
 
-    public Faculdade(Integer id, String campus, String nome, List<Endereco> fkEndereco) {
-        this.id = id;
+    public Faculdade(String campus, String nome, String cep) {
         this.campus = campus;
         this.nome = nome;
-        this.fkEndereco = fkEndereco;
-    }
-
-    public Faculdade(String nome) {
-        this.nome = nome;
+        this.cep = cep;
     }
 
     public int getId() {
@@ -77,6 +72,14 @@ public class Faculdade {
 
     public void setCampus(String campus) {
         this.campus = campus;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public void setFaculdadeRole(Set<Role> faculdadeRole) {

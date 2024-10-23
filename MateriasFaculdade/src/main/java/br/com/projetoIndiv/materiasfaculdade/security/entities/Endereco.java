@@ -40,7 +40,8 @@ public class Endereco {
     public Endereco() {
     }
 
-    public Endereco(Integer id, String logradouro, String bairro, String localidade, String estado, String cep, Faculdade faculdade) {
+    public Endereco(Integer id, String logradouro, String bairro, String localidade, String estado, String cep,
+            Faculdade faculdade) {
         this.id = id;
         this.logradouro = logradouro;
         this.bairro = bairro;
@@ -48,6 +49,10 @@ public class Endereco {
         this.estado = estado;
         this.cep = cep;
         this.faculdade = faculdade;
+    }
+
+    public Endereco(String cep) {
+        this.cep = cep;
     }
 
     public Integer getId() {

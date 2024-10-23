@@ -39,9 +39,13 @@ public class WebSecurityConfig {
 				.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandler))
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/g6/**", "/auth/**", "/h2-console/**", "/roles/**", "/test/all/**",
-								"/swagger-ui/**", "/v3/api-docs/**", "/actuator/**", "/test/**", "/login/**", "/faculdade/**", 
-								"/signup/**", "/signin/**", "/estudante/**", "/enderecos/**").permitAll()
+						.requestMatchers("/g6/**", "/auth/**", "/api/v1/public/**", "/h2-console/**", "/roles/**",
+								"/test/all/**",
+								"/swagger-ui/**", "/v3/api-docs/**", "/actuator/**", "/test/**", "/login/**",
+								"/faculdade/**", "/signupEstudante/**", "/signupFaculdade/**", "/signinEstudante/**",
+								"/estudante/**",
+								"/enderecos/**")
+						.permitAll()
 						.requestMatchers("/test/user/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/test/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated());

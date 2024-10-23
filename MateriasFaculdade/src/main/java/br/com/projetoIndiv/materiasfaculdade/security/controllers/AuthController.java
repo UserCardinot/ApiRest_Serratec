@@ -21,12 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.JwtResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.LoginRequestDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.MessageResponseDTO;
-import br.com.projetoIndiv.materiasfaculdade.security.dto.SignupRequestDTO;
+import br.com.projetoIndiv.materiasfaculdade.security.dto.SignupEstudRequestDTO;
+import br.com.projetoIndiv.materiasfaculdade.security.dto.SignupFaculRequestDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Estudante;
+import br.com.projetoIndiv.materiasfaculdade.security.entities.Faculdade;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Role;
 import br.com.projetoIndiv.materiasfaculdade.security.enums.RoleEnum;
 import br.com.projetoIndiv.materiasfaculdade.security.jwt.JwtUtils;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.EstudanteRepository;
+import br.com.projetoIndiv.materiasfaculdade.security.repositories.FaculdadeRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.RoleRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EstudanteDetailsImpl;
 import jakarta.validation.Valid;
@@ -42,6 +45,9 @@ public class AuthController {
 	EstudanteRepository estudRepository;
 
 	@Autowired
+	FaculdadeRepository faculRepository;
+
+	@Autowired
 	RoleRepository roleRepository;
 
 	@Autowired
@@ -50,7 +56,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@PostMapping("/signin")
+	@PostMapping("/signinEstudante")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -64,61 +70,55 @@ public class AuthController {
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(
-				new JwtResponseDTO(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getMatricula(), roles));
+				new JwtResponseDTO(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getMatricula(),
+						roles));
 	}
 
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signUpRequest) {
-		if (estudRepository.existsByUsername(signUpRequest.getUsername())) {
+	@PostMapping("/signupEstudante")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupEstudRequestDTO signUpEstudRequest) {
+		if (estudRepository.existsByUsername(signUpEstudRequest.getUsername())) {
 			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro: Username já utilizado!"));
 		}
 
-		if (estudRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (estudRepository.existsByEmail(signUpEstudRequest.getEmail())) {
 			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro: Email já utilizado!"));
 		}
 
-		Estudante estud = new Estudante(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getMatricula());
+		Estudante estud = new Estudante(signUpEstudRequest.getUsername(), signUpEstudRequest.getEmail(),
+				encoder.encode(signUpEstudRequest.getPassword()), signUpEstudRequest.getMatricula(),
+				signUpEstudRequest.getIdade());
 
-		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 
-		if (strRoles == null) {
-			Role usuarioRole = roleRepository.findByName(RoleEnum.ROLE_USUARIO)
-					.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
-			roles.add(usuarioRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "admin":
-					Role adminRole = roleRepository.findByName(RoleEnum.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
-					roles.add(adminRole);
-
-					break;
-				case "estudante":
-					Role modRole = roleRepository.findByName(RoleEnum.ROLE_ESTUDANTE)
-					.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
-					roles.add(modRole);
-					
-					break;
-
-				case "usuario":
-					Role usuarioRole = roleRepository.findByName(RoleEnum.ROLE_USUARIO)
-							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
-					roles.add(usuarioRole);
-
-					break;
-				default:
-					usuarioRole = roleRepository.findByName(RoleEnum.ROLE_USUARIO)
-							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
-					roles.add(usuarioRole);
-				}
-			});
-		}
+		Role usuarioRole = roleRepository.findByName(RoleEnum.ROLE_ESTUDANTE)
+				.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
+		roles.add(usuarioRole);
 
 		estud.setRoles(roles);
 		estudRepository.save(estud);
 
 		return ResponseEntity.ok(new MessageResponseDTO("Usuário registrado com sucesso!"));
+	}
+
+	@PostMapping("/signupFaculdade")
+	public ResponseEntity<?> registerFaculdade(@Valid @RequestBody SignupFaculRequestDTO signUpFaculRequest) {
+
+		if (faculRepository.existsByCampus(signUpFaculRequest.getCampus())) {
+			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro: Campus já utilizado!"));
+		}
+
+		Faculdade facul = new Faculdade(signUpFaculRequest.getNome(), signUpFaculRequest.getCampus(),
+				signUpFaculRequest.getCep());
+
+		Set<Role> roles = new HashSet<>();
+
+		Role usuarioRole = roleRepository.findByName(RoleEnum.ROLE_FACULDADE)
+				.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
+		roles.add(usuarioRole);
+
+		facul.setFaculdadeRole(roles);
+		faculRepository.save(facul);
+
+		return ResponseEntity.ok(new MessageResponseDTO("Faculdade registrada com sucesso!"));
 	}
 }

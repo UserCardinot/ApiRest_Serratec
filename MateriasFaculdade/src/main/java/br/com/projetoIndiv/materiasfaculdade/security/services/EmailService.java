@@ -16,10 +16,10 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Component
-public class EmailService {	
+public class EmailService {
 	@Autowired
 	public JavaMailSender javaMailSender;
-	
+
 	@Value("${spring.mail.username}")
 	private String emailFrom;
 
@@ -28,7 +28,7 @@ public class EmailService {
 
 	@Value("${spring.mail.port}")
 	private Integer emailPort;
-	
+
 	@Value("${spring.mail.password}")
 	private String emailPassword;
 
@@ -46,12 +46,12 @@ public class EmailService {
 		return mailSender;
 	}
 
-	public String writerEmail(){
+	public String writerEmail() {
 		LocalDateTime time = LocalDateTime.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo("debsdebbie90@gmail.com");
+		message.setTo("lucascardinotdasilva@gmail.com");
 		message.setSubject("Teste de envio de email");
 		message.setText("Email enviado com sucesso! " + time.format(format));
 		message.setFrom("lucascardinot2000@gmail.com");
@@ -64,7 +64,7 @@ public class EmailService {
 		}
 	}
 
-	public String writerEmail2(){
+	public String writerEmail2() {
 		LocalDateTime time = LocalDateTime.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
@@ -73,12 +73,12 @@ public class EmailService {
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 			helper.setSubject("Teste de envio de email 2");
-			helper.setTo("debsdebbie90@gmail.com");
+			helper.setTo("lucascardinotdasilva@gmail.com");
 			helper.setFrom("lucascardinot2000@gmail.com");
 
 			String html = "<h1>ME FAZ UM PIX AE</h1><br><p>Email enviado com sucesso! " + time.format(format) + "</p>";
 
-			helper.setText(html,true);
+			helper.setText(html, true);
 			javaMailSender.send(message);
 			return "Email enviado com sucesso";
 		} catch (MessagingException e) {

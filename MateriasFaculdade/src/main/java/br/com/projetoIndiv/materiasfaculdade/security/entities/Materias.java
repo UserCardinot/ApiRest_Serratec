@@ -31,12 +31,11 @@ public class Materias {
     @Column(name = "Mat_txt_professor")
     private String professor;
 
-    @NotBlank
     @Column(name = "Mat_int_cargaHoraria")
     private int cargaHoraria;
 
     @ManyToMany
-    @JoinTable(name = "estudante_materia", joinColumns = @JoinColumn(name = "materia_id"),inverseJoinColumns = @JoinColumn(name = "estudante_id"))
+    @JoinTable(name = "estudante_materia", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "estudante_id"))
     private Set<Estudante> estudantes = new HashSet<>();
 
     @ManyToMany
