@@ -1,5 +1,7 @@
 package br.com.projetoIndiv.materiasfaculdade.security.dto;
 
+import br.com.projetoIndiv.materiasfaculdade.security.entities.Endereco;
+
 public class EnderecoResponseDTO {
 
     private String logradouro;
@@ -7,6 +9,18 @@ public class EnderecoResponseDTO {
     private String localidade;
     private String estado;
     private String cep;
+
+    public Endereco toEntity() {
+        Endereco endereco = new Endereco();
+
+        endereco.setLogradouro(this.logradouro);
+        endereco.setBairro(this.bairro);
+        endereco.setLocalidade(this.localidade);
+        endereco.setEstado(this.estado);
+        endereco.setCep(this.cep);
+
+        return endereco;
+    }
 
     public String getLogradouro() {
         return logradouro;

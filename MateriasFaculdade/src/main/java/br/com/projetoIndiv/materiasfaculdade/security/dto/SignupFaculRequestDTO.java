@@ -6,7 +6,6 @@ public class SignupFaculRequestDTO {
 
     private String nome;
     private String campus;
-
     private String cep;
 
     private Set<String> role;

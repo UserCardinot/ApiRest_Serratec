@@ -2,13 +2,8 @@ package br.com.projetoIndiv.materiasfaculdade.security.dto;
 
 public class FaculdadeDTO {
 
-    private Integer id;
     private String nome;
     private String campus;
-
-    public Integer getId() {
-        return id;
-    }
 
     public String getNome() {
         return nome;
@@ -16,10 +11,6 @@ public class FaculdadeDTO {
 
     public String getCampus() {
         return campus;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setNome(String nome) {

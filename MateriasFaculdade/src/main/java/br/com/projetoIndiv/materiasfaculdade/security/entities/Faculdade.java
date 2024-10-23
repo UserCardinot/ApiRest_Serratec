@@ -1,5 +1,6 @@
 package br.com.projetoIndiv.materiasfaculdade.security.entities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,22 +33,22 @@ public class Faculdade {
     private String nome;
 
     @Column(name = "Fac_txt_cep")
-    private String cep;
+    private String enderecoCep;
 
     @OneToMany(mappedBy = "faculdade")
-    private List<Endereco> fkEndereco;
+    private List<Endereco> enderecos = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "faculdade_roles", joinColumns = @JoinColumn(name = "faculdade_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> faculdadeRole = new HashSet<>();
 
     public Faculdade() {
+        this.enderecos = new ArrayList<>();
     }
 
-    public Faculdade(String campus, String nome, String cep) {
+    public Faculdade(String campus, String nome) {
         this.campus = campus;
         this.nome = nome;
-        this.cep = cep;
     }
 
     public int getId() {
@@ -75,11 +76,11 @@ public class Faculdade {
     }
 
     public String getCep() {
-        return cep;
+        return enderecoCep;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setCep(String enderecoCep) {
+        this.enderecoCep = enderecoCep;
     }
 
     public void setFaculdadeRole(Set<Role> faculdadeRole) {
@@ -90,11 +91,11 @@ public class Faculdade {
         return faculdadeRole;
     }
 
-    public List<Endereco> getFkEndereco() {
-        return fkEndereco;
+    public List<Endereco> getEnderecos() {
+        return enderecos;
     }
 
-    public void setFkEndereco(List<Endereco> fkEndereco) {
-        this.fkEndereco = fkEndereco;
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
     }
 }

@@ -3,6 +3,8 @@ package br.com.projetoIndiv.materiasfaculdade.security.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.projetoIndiv.materiasfaculdade.security.dto.EnderecoResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.FaculdadeDTO;
+import br.com.projetoIndiv.materiasfaculdade.security.dto.MessageResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Faculdade;
+import br.com.projetoIndiv.materiasfaculdade.security.repositories.FaculdadeRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EnderecoService;
 import br.com.projetoIndiv.materiasfaculdade.security.services.FaculdadeService;
 
@@ -27,7 +31,10 @@ public class FaculdadeController {
 	EnderecoService enderecoService;
 
 	@Autowired
-	private FaculdadeService faculdadeService;
+	FaculdadeService faculdadeService;
+
+	@Autowired
+	FaculdadeRepository faculdadeRepository;
 
 	@GetMapping
 	public List<Faculdade> getALLFaculdades() {
@@ -49,8 +56,22 @@ public class FaculdadeController {
 		faculdadeService.delete(id);
 	}
 
-	@PostMapping("/BuscarCep")
-	public EnderecoResponseDTO buscarCep(@RequestParam String cep) {
-		return enderecoService.buscarEndereco(cep);
+	@PostMapping("/BuscarFaculdadeByCep")
+	public ResponseEntity<?> buscarCep(@RequestParam String cep) {
+		EnderecoResponseDTO enderecoResponse = enderecoService.buscarEndereco(cep);
+
+		if (enderecoResponse == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new MessageResponseDTO("Erro: Endereço não encontrado!"));
+		}
+
+		List<Faculdade> faculdades = faculdadeRepository.findByEnderecoCep(cep);
+
+		if (faculdades.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new MessageResponseDTO("Erro: Nenhuma faculdade encontrada para o CEP!"));
+		}
+
+		return ResponseEntity.ok(faculdades);
 	}
 }

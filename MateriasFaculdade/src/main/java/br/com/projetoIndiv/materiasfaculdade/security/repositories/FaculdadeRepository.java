@@ -15,5 +15,7 @@ public interface FaculdadeRepository extends JpaRepository<Faculdade, Integer> {
 
 	Boolean existsByCampus(String campus);
 
+	List<Faculdade> findByEnderecoCep(String cep);
+
 	List<Faculdade> findAll();
 }

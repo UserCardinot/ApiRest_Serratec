@@ -18,19 +18,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.projetoIndiv.materiasfaculdade.security.dto.EnderecoResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.JwtResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.LoginRequestDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.MessageResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.SignupEstudRequestDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.SignupFaculRequestDTO;
+import br.com.projetoIndiv.materiasfaculdade.security.entities.Endereco;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Estudante;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Faculdade;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Role;
 import br.com.projetoIndiv.materiasfaculdade.security.enums.RoleEnum;
 import br.com.projetoIndiv.materiasfaculdade.security.jwt.JwtUtils;
+import br.com.projetoIndiv.materiasfaculdade.security.repositories.EnderecoRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.EstudanteRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.FaculdadeRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.RoleRepository;
+import br.com.projetoIndiv.materiasfaculdade.security.services.EnderecoService;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EstudanteDetailsImpl;
 import jakarta.validation.Valid;
 
@@ -38,6 +42,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -46,6 +51,12 @@ public class AuthController {
 
 	@Autowired
 	FaculdadeRepository faculRepository;
+
+	@Autowired
+	EnderecoRepository enderecoRepository;
+
+	@Autowired
+	EnderecoService enderecoService;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -103,22 +114,48 @@ public class AuthController {
 	@PostMapping("/signupFaculdade")
 	public ResponseEntity<?> registerFaculdade(@Valid @RequestBody SignupFaculRequestDTO signUpFaculRequest) {
 
+		// Verificar se o campus já existe
 		if (faculRepository.existsByCampus(signUpFaculRequest.getCampus())) {
 			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro: Campus já utilizado!"));
 		}
 
-		Faculdade facul = new Faculdade(signUpFaculRequest.getNome(), signUpFaculRequest.getCampus(),
-				signUpFaculRequest.getCep());
+		// Criar a nova instância da Faculdade
+		Faculdade facul = new Faculdade();
+		facul.setNome(signUpFaculRequest.getNome());
+		facul.setCampus(signUpFaculRequest.getCampus());
+		facul.setCep(signUpFaculRequest.getCep());
 
+		// Definir as roles da faculdade
 		Set<Role> roles = new HashSet<>();
-
 		Role usuarioRole = roleRepository.findByName(RoleEnum.ROLE_FACULDADE)
 				.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 		roles.add(usuarioRole);
-
 		facul.setFaculdadeRole(roles);
+
+		// Salvar a faculdade para obter o ID
+		facul = faculRepository.save(facul);
+
+		// Buscar informações do endereço usando o CEP
+		EnderecoResponseDTO enderecoResponse = enderecoService.buscarEndereco(signUpFaculRequest.getCep());
+
+		// Criar uma nova instância de Endereco com as informações retornadas do ViaCEP
+		Endereco endereco = new Endereco();
+		endereco.setCep(enderecoResponse.getCep());
+		endereco.setLogradouro(enderecoResponse.getLogradouro());
+		endereco.setBairro(enderecoResponse.getBairro());
+		endereco.setLocalidade(enderecoResponse.getLocalidade());
+		endereco.setEstado(enderecoResponse.getEstado());
+		endereco.setFaculdade(facul);
+
+		// Salvar o endereço no banco de dados
+		enderecoRepository.save(endereco);
+
+		// Adicionar o endereço à lista de endereços da faculdade e salvar a faculdade
+		// novamente
+		facul.getEnderecos().add(endereco);
 		faculRepository.save(facul);
 
 		return ResponseEntity.ok(new MessageResponseDTO("Faculdade registrada com sucesso!"));
 	}
+
 }

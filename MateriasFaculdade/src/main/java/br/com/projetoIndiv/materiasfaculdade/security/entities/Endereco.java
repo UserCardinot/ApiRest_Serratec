@@ -106,4 +106,8 @@ public class Endereco {
     public Faculdade getFaculdade() {
         return faculdade;
     }
+
+    public void setFaculdade(Faculdade faculdade) {
+        this.faculdade = faculdade;
+    }
 }
