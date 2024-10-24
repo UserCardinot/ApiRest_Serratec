@@ -39,6 +39,7 @@ public class Faculdade {
     private String enderecoCep;
 
     @OneToMany(mappedBy = "faculdade", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

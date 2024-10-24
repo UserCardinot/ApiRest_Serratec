@@ -8,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.projetoIndiv.materiasfaculdade.security.dto.EnderecoFaculdadeDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.EnderecoResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.FaculdadeDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.MessageResponseDTO;
@@ -56,7 +56,7 @@ public class FaculdadeController {
 		faculdadeService.delete(id);
 	}
 
-	@PostMapping("/BuscarFaculdadeByCep")
+	@GetMapping("/EnderecoFaculByCep")
 	public ResponseEntity<?> buscarCep(@RequestParam String cep) {
 		EnderecoResponseDTO enderecoResponse = enderecoService.buscarEndereco(cep);
 
@@ -72,6 +72,7 @@ public class FaculdadeController {
 					.body(new MessageResponseDTO("Erro: Nenhuma faculdade encontrada para o CEP!"));
 		}
 
-		return ResponseEntity.ok(faculdades);
+		EnderecoFaculdadeDTO resultado = new EnderecoFaculdadeDTO(enderecoResponse, faculdades);
+		return ResponseEntity.ok(resultado);
 	}
 }

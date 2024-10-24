@@ -37,6 +37,7 @@ public class Materias {
     private int cargaHoraria;
 
     @ManyToMany(mappedBy = "materias")
+    @JsonBackReference
     private Set<Estudante> estudantes = new HashSet<>();
 
     @ManyToMany

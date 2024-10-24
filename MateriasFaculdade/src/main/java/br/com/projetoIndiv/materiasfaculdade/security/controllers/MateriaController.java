@@ -50,7 +50,7 @@ public class MateriaController {
         return materiaService.findByNome(nome);
     }
 
-    @PostMapping("/createMateria")
+    @PostMapping
     public ResponseEntity<?> saveMateria(MateriaDTO materiaDTO) {
 
         if (materiaRepository.existsByNome(materiaDTO.getNome())) {

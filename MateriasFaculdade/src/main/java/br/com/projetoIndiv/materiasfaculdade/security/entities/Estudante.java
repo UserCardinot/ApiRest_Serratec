@@ -44,6 +44,7 @@ public class Estudante {
 
 	@ManyToMany
 	@JoinTable(name = "estudante_materia", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "materia_id"))
+	@JsonBackReference
 	private Set<Materias> materias = new HashSet<>();
 
 	@OneToOne(mappedBy = "estudante", cascade = CascadeType.ALL, orphanRemoval = true)
