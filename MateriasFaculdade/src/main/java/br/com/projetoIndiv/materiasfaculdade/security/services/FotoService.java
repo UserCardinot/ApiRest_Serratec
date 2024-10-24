@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Estudante;
 import br.com.projetoIndiv.materiasfaculdade.security.entities.Foto;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.FotoRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class FotoService {
@@ -14,6 +15,7 @@ public class FotoService {
     @Autowired
     FotoRepository fotoRepository;
 
+    @Transactional
     public Foto cadastrarFoto(MultipartFile foto, Estudante estudante) throws Exception {
         Foto fotinha = new Foto();
 

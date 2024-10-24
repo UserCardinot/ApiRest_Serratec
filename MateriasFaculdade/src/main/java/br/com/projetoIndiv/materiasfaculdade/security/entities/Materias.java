@@ -36,9 +36,7 @@ public class Materias {
     @Column(name = "Mat_int_cargaHoraria")
     private int cargaHoraria;
 
-    @ManyToMany
-    @JoinTable(name = "estudante_materia", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "estudante_id"))
-    @JsonBackReference
+    @ManyToMany(mappedBy = "materias")
     private Set<Estudante> estudantes = new HashSet<>();
 
     @ManyToMany

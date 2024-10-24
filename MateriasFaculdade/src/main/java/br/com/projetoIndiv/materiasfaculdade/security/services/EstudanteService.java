@@ -28,6 +28,11 @@ public class EstudanteService {
         return estudanteRepository.findById(id).get();
     }
 
+    public Estudante findByUsername(String username) {
+        return estudanteRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Estudante não encontrado"));
+    }
+
     public Estudante save(Estudante estudante) {
         return estudanteRepository.save(estudante);
     }

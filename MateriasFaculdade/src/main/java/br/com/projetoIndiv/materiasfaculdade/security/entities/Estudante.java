@@ -42,6 +42,10 @@ public class Estudante {
 	@Column(name = "Est_int_idade")
 	private int idade;
 
+	@ManyToMany
+	@JoinTable(name = "estudante_materia", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "materia_id"))
+	private Set<Materias> materias = new HashSet<>();
+
 	@OneToOne(mappedBy = "estudante", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "foto_id")
 	@JsonBackReference
@@ -85,6 +89,10 @@ public class Estudante {
 
 	public int getIdade() {
 		return idade;
+	}
+
+	public Set<Materias> getMaterias() {
+		return materias;
 	}
 
 	public void setUsername(String username) {
