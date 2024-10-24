@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,7 +38,7 @@ public class Faculdade {
     @Column(name = "Fac_txt_cep")
     private String enderecoCep;
 
-    @OneToMany(mappedBy = "faculdade")
+    @OneToMany(mappedBy = "faculdade", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

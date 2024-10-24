@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.projetoIndiv.materiasfaculdade.security.dto.EnderecoResponseDTO;
 import br.com.projetoIndiv.materiasfaculdade.security.dto.JwtResponseDTO;
@@ -36,12 +38,16 @@ import br.com.projetoIndiv.materiasfaculdade.security.repositories.FaculdadeRepo
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.RoleRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EnderecoService;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EstudanteDetailsImpl;
+import br.com.projetoIndiv.materiasfaculdade.security.services.FotoService;
 import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+	@Autowired
+	FotoService fotoService;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -86,7 +92,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/signupEstudante")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupEstudRequestDTO signUpEstudRequest) {
+	public ResponseEntity<?> registerUser(@Valid @RequestPart SignupEstudRequestDTO signUpEstudRequest,
+			@RequestPart MultipartFile foto) throws Exception {
 		if (estudRepository.existsByUsername(signUpEstudRequest.getUsername())) {
 			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro: Username já utilizado!"));
 		}
@@ -107,6 +114,7 @@ public class AuthController {
 
 		estud.setRoles(roles);
 		estudRepository.save(estud);
+		fotoService.cadastrarFoto(foto, estud);
 
 		return ResponseEntity.ok(new MessageResponseDTO("Usuário registrado com sucesso!"));
 	}
