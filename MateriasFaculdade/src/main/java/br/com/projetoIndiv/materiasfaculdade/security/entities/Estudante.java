@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,6 +41,11 @@ public class Estudante {
 
 	@Column(name = "Est_int_idade")
 	private int idade;
+
+	@OneToOne(mappedBy = "estudante", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "foto_id")
+	@JsonBackReference
+	private Foto foto;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "estudante_roles", joinColumns = @JoinColumn(name = "estudante_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -98,6 +105,14 @@ public class Estudante {
 
 	public void setIdade(int idade) {
 		this.idade = idade;
+	}
+
+	public Foto getFoto() {
+		return foto;
+	}
+
+	public void setFoto(Foto foto) {
+		this.foto = foto;
 	}
 
 	public Set<Role> getRoles() {

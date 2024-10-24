@@ -43,8 +43,7 @@ public class WebSecurityConfig {
 								"/test/all/**",
 								"/swagger-ui/**", "/v3/api-docs/**", "/actuator/**", "/test/**", "/login/**",
 								"/faculdade/**", "/signupEstudante/**", "/signupFaculdade/**", "/signinEstudante/**",
-								"/estudante/**",
-								"/enderecos/**")
+								"/estudante/**", "/enderecos/**", "/materia/**")
 						.permitAll()
 						.requestMatchers("/test/user/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/test/admin/**").hasRole("ADMIN")

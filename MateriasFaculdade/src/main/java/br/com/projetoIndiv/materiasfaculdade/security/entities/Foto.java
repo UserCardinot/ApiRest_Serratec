@@ -1,5 +1,7 @@
 package br.com.projetoIndiv.materiasfaculdade.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +34,7 @@ public class Foto {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Estudante estudante;
 
     public Foto() {
