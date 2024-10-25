@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.projetoIndiv</groupId>
     <artifactId>materias</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
     <name>MateriasFaculdade</name>
     <description>Projeto individual</description>
     <url />

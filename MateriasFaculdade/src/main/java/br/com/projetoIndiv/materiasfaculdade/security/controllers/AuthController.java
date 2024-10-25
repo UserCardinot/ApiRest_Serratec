@@ -1,5 +1,6 @@
 package br.com.projetoIndiv.materiasfaculdade.security.controllers;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ import br.com.projetoIndiv.materiasfaculdade.security.repositories.EnderecoRepos
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.EstudanteRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.FaculdadeRepository;
 import br.com.projetoIndiv.materiasfaculdade.security.repositories.RoleRepository;
+import br.com.projetoIndiv.materiasfaculdade.security.services.EmailService;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EnderecoService;
 import br.com.projetoIndiv.materiasfaculdade.security.services.EstudanteDetailsImpl;
 import br.com.projetoIndiv.materiasfaculdade.security.services.FotoService;
@@ -69,6 +71,9 @@ public class AuthController {
 
 	@Autowired
 	PasswordEncoder encoder;
+
+	@Autowired
+	EmailService emailService;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -115,6 +120,12 @@ public class AuthController {
 		estud.setRoles(roles);
 		estudRepository.save(estud);
 		fotoService.cadastrarFoto(foto, estud);
+
+		try {
+			emailService.emailPersonalizadoSignUp(signUpEstudRequest);
+		} catch (IOException e) {
+			return ResponseEntity.badRequest().body(new MessageResponseDTO("Erro ao enviar email"));
+		}
 
 		return ResponseEntity.ok(new MessageResponseDTO("Usuário registrado com sucesso!"));
 	}

@@ -76,16 +76,4 @@ public class EstudanteController {
 
 		return ResponseEntity.ok("Matéria adicionada ao estudante com sucesso");
 	}
-
-	@GetMapping("/emailtest")
-	public String estudante() {
-		emailService.writerEmail();
-		return "Email enviado com sucesso!";
-	}
-
-	@GetMapping("/testeemail2")
-	public String testeemail2() {
-		emailService.writerEmail2();
-		return "Email enviado com sucesso!";
-	}
 }

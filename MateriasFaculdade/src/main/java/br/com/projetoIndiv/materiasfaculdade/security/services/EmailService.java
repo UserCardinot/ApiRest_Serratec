@@ -1,17 +1,22 @@
 package br.com.projetoIndiv.materiasfaculdade.security.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import br.com.projetoIndiv.materiasfaculdade.security.dto.SignupEstudRequestDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -46,25 +51,7 @@ public class EmailService {
 		return mailSender;
 	}
 
-	public String writerEmail() {
-		LocalDateTime time = LocalDateTime.now();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo("lucascardinotdasilva@gmail.com");
-		message.setSubject("Teste de envio de email");
-		message.setText("Email enviado com sucesso! " + time.format(format));
-		message.setFrom("lucascardinot2000@gmail.com");
-
-		try {
-			javaMailSender.send(message);
-			return "Email enviado com sucesso";
-		} catch (Exception e) {
-			return "Erro ao enviar email\n\n" + e.getMessage();
-		}
-	}
-
-	public String writerEmail2() {
+	public String emailPersonalizadoSignUp(SignupEstudRequestDTO dto) throws IOException {
 		LocalDateTime time = LocalDateTime.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
@@ -72,17 +59,30 @@ public class EmailService {
 
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-			helper.setSubject("Teste de envio de email 2");
-			helper.setTo("lucascardinotdasilva@gmail.com");
+			helper.setSubject("Cadastro Realizado com Sucesso! - " + time.format(format));
 			helper.setFrom("lucascardinot2000@gmail.com");
+			helper.setTo("debsdebbie90@gmail.com");
 
-			String html = "<h1>ME FAZ UM PIX AE</h1><br><p>Email enviado com sucesso! " + time.format(format) + "</p>";
+			Path path = Paths.get(new ClassPathResource("templates/cadastro.html").getURI());
+			String htmlContent;
+			try {
+				htmlContent = Files.readString(path);
+			} catch (IOException e) {
+				return "Erro ao ler o conteúdo do email\n\n" + e.getMessage();
+			}
 
-			helper.setText(html, true);
+			htmlContent = htmlContent.replace("{{nome}}", dto.getUsername());
+			htmlContent = htmlContent.replace("{{email}}", dto.getEmail());
+			htmlContent = htmlContent.replace("{{matricula}}", dto.getMatricula().toString());
+			htmlContent = htmlContent.replace("{{idade}}", dto.getIdade().toString());
+
+			helper.setText(htmlContent, true);
+
 			javaMailSender.send(message);
 			return "Email enviado com sucesso";
 		} catch (MessagingException e) {
 			return "Erro ao enviar email\n\n" + e.getMessage();
 		}
+
 	}
 }
