@@ -61,7 +61,7 @@ public class EmailService {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 			helper.setSubject("Cadastro Realizado com Sucesso! - " + time.format(format));
 			helper.setFrom("lucascardinot2000@gmail.com");
-			helper.setTo("debsdebbie90@gmail.com");
+			helper.setTo("lucascardinotdasilva@gmail.com");
 
 			Path path = Paths.get(new ClassPathResource("templates/cadastro.html").getURI());
 			String htmlContent;

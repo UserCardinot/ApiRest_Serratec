@@ -37,14 +37,18 @@ public class Foto {
     @JsonBackReference
     private Estudante estudante;
 
+    @Column(name = "fo_tx_url")
+    private String url;
+
     public Foto() {
     }
 
-    public Foto(String tipo, String nome, byte[] dados, Estudante estudante) {
+    public Foto(String tipo, String nome, byte[] dados, Estudante estudante, String url) {
         this.tipo = tipo;
         this.nome = nome;
         this.dados = dados;
         this.estudante = estudante;
+        this.url = url;
     }
 
     public Integer getId() {
@@ -85,5 +89,13 @@ public class Foto {
 
     public void setEstudante(Estudante estudante) {
         this.estudante = estudante;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
